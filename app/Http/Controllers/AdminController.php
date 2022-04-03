@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Food;
+use App\Models\Reservation;
 
 class AdminController extends Controller
 {
@@ -21,9 +22,43 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+    public function deletemenu($id)
+    {
+        $data = Food::find($id);
+        $data->delete();
+        return redirect()->back();
+    }
+
+    public function updateview($id)
+    {
+        $data = Food::find($id);
+        return view('admin.updateview', compact('data'));
+    }
+
+
+    public function update($id, Request $request)
+    {
+        $data = Food::find($id);
+        $image = $request->image;
+
+        $imagename = time() . '.' . $image->getClientOriginalExtension();
+
+        $request->image->move('foodimage', $imagename);
+
+        $data->image = $imagename;
+        $data->title = $request->title;
+        $data->price = $request->price;
+        $data->description = $request->description;
+
+        $data->save();
+
+        return redirect()->back();
+    }
+
     public function foodmenu()
     {
-        return view('admin.foodmenu');
+        $data = Food::all();
+        return view('admin.foodmenu', compact('data'));
     }
 
     public function upload(Request $request)
@@ -43,5 +78,28 @@ class AdminController extends Controller
         $data->save();
 
         return redirect()->back();
+    }
+
+    public function reservation(Request $request)
+    {
+        $data = new Reservation();
+
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->guest = $request->guest;
+        $data->date = $request->date;
+        $data->time = $request->time;
+        $data->message = $request->message;
+
+        $data->save();
+
+        return redirect()->back();
+    }
+
+    public function viewreservation()
+    {
+        $data = Reservation::all();
+        return view("admin.adminreservation", compact('data'));
     }
 }

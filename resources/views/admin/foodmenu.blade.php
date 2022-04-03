@@ -41,6 +41,28 @@
                 </div>
 
             </form>
+
+            <table>
+                <tr>
+                    <th style="padding:30px">Food Name</th>
+                    <th style="padding:30px">Price</th>
+                    <th style="padding:30px">Description</th>
+                    <th style="padding:30px">Image</th>
+                    <th style="padding:30px">Action</th>
+                    <th style="padding:30px">Action2</th>
+                </tr>
+
+                @foreach($data as $data)
+                <tr>
+                    <td style="text-align:center">{{$data->title}}</td>
+                    <td style="text-align:center">{{$data->price}}</td>
+                    <td style="text-align:center">{{$data->description}}</td>
+                    <td style="text-align:center"><img height="200" width="200" src="/foodimage/{{$data->image}}"></td>
+                    <td style="text-align:center"><a href="{{url('/deletemenu', $data->id)}}">Delete</a></td>
+                    <td style="text-align:center"><a href="{{url('/updateview', $data->id)}}">Update</a></td>
+                </tr>
+                @endforeach
+            </table>
         </div>
 
     </div>
