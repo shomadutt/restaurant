@@ -2,164 +2,249 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
 use App\Models\User;
 use App\Models\Food;
 use App\Models\Foodchef;
 use App\Models\Reservation;
+use App\Models\Order;
+
 
 class AdminController extends Controller
 {
     public function user()
     {
-        $data = User::all();
-        return view("admin.users", compact('data'));
+        if (Auth::id()) {
+            $data = User::all();
+            return view("admin.users", compact('data'));
+        } else {
+            return redirect("login");
+        }
     }
+
 
     public function deleteuser($id)
     {
-        $data = User::find($id);
-        $data->delete();
-        return redirect()->back();
+        if (Auth::id()) {
+            $data = User::find($id);
+            $data->delete();
+            return redirect()->back();
+        } else {
+            return redirect("login");
+        }
     }
 
     public function deletemenu($id)
     {
-        $data = Food::find($id);
-        $data->delete();
-        return redirect()->back();
+        if (Auth::id()) {
+            $data = Food::find($id);
+            $data->delete();
+            return redirect()->back();
+        } else {
+            return redirect("login");
+        }
     }
 
     public function updateview($id)
     {
-        $data = Food::find($id);
-        return view('admin.updateview', compact('data'));
+        if (Auth::id()) {
+            $data = Food::find($id);
+            return view('admin.updateview', compact('data'));
+        } else {
+            return redirect("login");
+        }
     }
 
 
     public function update($id, Request $request)
     {
-        $data = Food::find($id);
-        $image = $request->image;
+        if (Auth::id()) {
+            $data = Food::find($id);
+            $image = $request->image;
 
-        $imagename = time() . '.' . $image->getClientOriginalExtension();
+            $imagename = time() . '.' . $image->getClientOriginalExtension();
 
-        $request->image->move('foodimage', $imagename);
+            $request->image->move('foodimage', $imagename);
 
-        $data->image = $imagename;
-        $data->title = $request->title;
-        $data->price = $request->price;
-        $data->description = $request->description;
+            $data->image = $imagename;
+            $data->title = $request->title;
+            $data->price = $request->price;
+            $data->description = $request->description;
 
-        $data->save();
+            $data->save();
 
-        return redirect()->back();
+            return redirect()->back();
+        } else {
+            return redirect("login");
+        }
     }
 
     public function foodmenu()
     {
-        $data = Food::all();
-        return view('admin.foodmenu', compact('data'));
+        if (Auth::id()) {
+            $data = Food::all();
+            return view('admin.foodmenu', compact('data'));
+        } else {
+            return redirect("login");
+        }
     }
 
     public function upload(Request $request)
     {
-        $data = new food;
-        $image = $request->image;
+        if (Auth::id()) {
+            $data = new food;
+            $image = $request->image;
 
-        $imagename = time() . '.' . $image->getClientOriginalExtension();
+            $imagename = time() . '.' . $image->getClientOriginalExtension();
 
-        $request->image->move('foodimage', $imagename);
+            $request->image->move('foodimage', $imagename);
 
-        $data->image = $imagename;
-        $data->title = $request->title;
-        $data->price = $request->price;
-        $data->description = $request->description;
+            $data->image = $imagename;
+            $data->title = $request->title;
+            $data->price = $request->price;
+            $data->description = $request->description;
 
-        $data->save();
+            $data->save();
 
-        return redirect()->back();
+            return redirect()->back();
+        } else {
+            return redirect("login");
+        }
     }
 
     public function reservation(Request $request)
     {
-        $data = new Reservation();
+        if (Auth::id()) {
+            $data = new Reservation();
 
-        $data->name = $request->name;
-        $data->email = $request->email;
-        $data->phone = $request->phone;
-        $data->guest = $request->guest;
-        $data->date = $request->date;
-        $data->time = $request->time;
-        $data->message = $request->message;
+            $data->name = $request->name;
+            $data->email = $request->email;
+            $data->phone = $request->phone;
+            $data->guest = $request->guest;
+            $data->date = $request->date;
+            $data->time = $request->time;
+            $data->message = $request->message;
 
-        $data->save();
+            $data->save();
 
-        return redirect()->back();
+            return redirect()->back();
+        } else {
+            return redirect("login");
+        }
     }
 
     public function viewreservation()
     {
-        $data = Reservation::all();
-        return view("admin.adminreservation", compact('data'));
+        if (Auth::id()) {
+            $data = Reservation::all();
+            return view("admin.adminreservation", compact('data'));
+        } else {
+            return redirect("login");
+        }
     }
 
     public function viewchef()
     {
-        $data = Foodchef::all();
-        return view("admin.adminchef", compact('data'));
+        if (Auth::id()) {
+            $data = Foodchef::all();
+            return view("admin.adminchef", compact('data'));
+        } else {
+            return redirect("login");
+        }
     }
 
     public function uploadchef(Request $request)
     {
-        $data = new Foodchef();
-        $image = $request->image;
+        if (Auth::id()) {
+            $data = new Foodchef();
+            $image = $request->image;
 
-        $imagename = time() . '.' . $image->getClientOriginalExtension();
+            $imagename = time() . '.' . $image->getClientOriginalExtension();
 
-        $request->image->move('chefimage', $imagename);
+            $request->image->move('chefimage', $imagename);
 
-        $data->image = $imagename;
+            $data->image = $imagename;
 
-        $data->name = $request->name;
-        $data->speciality = $request->speciality;
+            $data->name = $request->name;
+            $data->speciality = $request->speciality;
 
-        $data->save();
+            $data->save();
 
-        return redirect()->back();
+            return redirect()->back();
+        } else {
+            return redirect("login");
+        }
     }
 
     public function updatechef($id)
     {
-        $data = new Foodchef();
-        $data = Foodchef::find($id);
-        return view('admin.updatechef', compact('data'));
+        if (Auth::id()) {
+            $data = new Foodchef();
+            $data = Foodchef::find($id);
+            return view('admin.updatechef', compact('data'));
+        } else {
+            return redirect("login");
+        }
     }
 
 
     public function updatefoodchef(Request $request, $id)
     {
-        $data = Foodchef::find($id);
+        if (Auth::id()) {
+            $data = Foodchef::find($id);
 
-        $image = $request->image;
+            $image = $request->image;
 
-        if ($image) {
-            $imagename = time() . '.' . $image->getClientOriginalExtension();
-            $request->image->move('chefimage', $imagename);
-            $data->image = $imagename;
+            if ($image) {
+                $imagename = time() . '.' . $image->getClientOriginalExtension();
+                $request->image->move('chefimage', $imagename);
+                $data->image = $imagename;
+            }
+
+            $data->name = $request->name;
+            $data->speciality = $request->speciality;
+
+            $data->save();
+            return redirect()->back();
+        } else {
+            return redirect("login");
         }
-
-        $data->name = $request->name;
-        $data->speciality = $request->speciality;
-
-        $data->save();
-        return redirect()->back();
     }
 
     public function deletechef($id)
     {
-        $data = Foodchef::find($id);
-        $data->delete();
-        return redirect()->back();
+        if (Auth::id()) {
+            $data = Foodchef::find($id);
+            $data->delete();
+            return redirect()->back();
+        } else {
+            return redirect("login");
+        }
+    }
+
+    public function orders()
+    {
+        if (Auth::id()) {
+            $data = Order::all();
+
+            return view('admin.orders', compact('data'));
+        } else {
+            return redirect("login");
+        }
+    }
+
+    public function search(Request $request)
+    {
+        if (Auth::id()) {
+            $search = $request->search;
+
+            $data = Order::where('name', 'Like', '%' . $search . '%')->orWhere('foodname', 'Like', '%' . $search . '%')->get();
+
+            return view('admin.orders', compact('data'));
+        } else {
+            return redirect("login");
+        }
     }
 }

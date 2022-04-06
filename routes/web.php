@@ -45,9 +45,22 @@ Route::post('/updatefoodchef/{id}', [AdminController::class, 'updatefoodchef']);
 
 Route::get('/deletechef/{id}', [AdminController::class, 'deletechef']);
 
+Route::post('/addcart/{id}', [HomeController::class, 'addcart']);
+
+Route::get('/showcart/{id}', [HomeController::class, 'showcart']);
+
 Route::post('/uploadchef', [AdminController::class, 'uploadchef']);
 
 Route::get('/redirects', [HomeController::class, 'redirects']);
+
+Route::get('/remove/{id}', [HomeController::class, 'remove']);
+
+Route::post('/orderconfirm', [HomeController::class, 'orderconfirm']);
+
+Route::get('/orders', [AdminController::class, 'orders']);
+
+Route::get('/search', [AdminController::class, 'search']);
+
 
 Route::middleware([
     'auth:sanctum',
